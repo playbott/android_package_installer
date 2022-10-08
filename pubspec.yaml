@@ -35,7 +35,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.android_package_installer.android_package_installer
+        package: com.android_package_installer
         pluginClass: AndroidPackageInstallerPlugin
 
   # To add assets to your plugin package, add an assets section, like this:

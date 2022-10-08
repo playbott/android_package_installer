@@ -1,4 +1,4 @@
-group 'com.android_package_installer.android_package_installer'
+group 'com.android_package_installer'
 version '1.0-SNAPSHOT'
 
 buildscript {
