@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'package:flutter/services.dart';
 import 'package:android_package_installer/android_package_installer.dart';
@@ -16,35 +17,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
-  final _androidPackageInstallerPlugin = AndroidPackageInstaller();
+  String _installationStatus = '';
 
   @override
   void initState() {
     super.initState();
-    initPlatformState();
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    // We also handle the message potentially returning null.
-    try {
-      platformVersion =
-          await _androidPackageInstallerPlugin.getPlatformVersion() ?? 'Unknown platform version';
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
   }
 
   @override
@@ -55,9 +32,51 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+          child: Column(
+            children: [
+              const SizedBox(height: 30),
+              _button('Install apk file', () async {
+                try {
+                  int? code = await AndroidPackageInstaller.installApk(apkFilePath: '/sdcard/Download/sb.apk');
+                  if (code != null) {
+                    setState(() {
+                      _installationStatus = PackageInstallerStatus.getStatusByCode(code).name;
+                    });
+                  }
+                } on PlatformException {
+                  print('Failed to share apk file.');
+                }
+              }),
+              const SizedBox(height: 30),
+              Text('_installationStatus: $_installationStatus'),
+              const Spacer(),
+              SizedBox(
+                child: Column(children: [
+                  const Text('Permissions:'),
+                  _button('External Storage', () => _requestPermission(Permission.storage)),
+                  _button('Request Install Packages', () => _requestPermission(Permission.requestInstallPackages)),
+                  _button('Manage External Storage\n(for Android 11+ target)',
+                      () => _requestPermission(Permission.manageExternalStorage)),
+                ]),
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+}
+
+ElevatedButton _button(String text, VoidCallback? onPressed) {
+  return ElevatedButton(
+    onPressed: onPressed,
+    child: Text(text),
+  );
+}
+
+void _requestPermission(Permission permission) async {
+  var status = await permission.status;
+  if (status.isDenied) {
+    await permission.request();
   }
 }
