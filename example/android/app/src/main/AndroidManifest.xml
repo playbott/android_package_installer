@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.android_package_installer.android_package_installer_example">
+    package="com.android_package_installer_example">
    <application
         android:label="android_package_installer_example"
         android:name="${applicationName}"
