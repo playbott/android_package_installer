@@ -19,8 +19,8 @@ import io.flutter.plugin.common.MethodChannel.Result
 import java.io.FileInputStream
 import java.io.IOException
 
-/** AndroidPackageInstallerPlugin */
-class AndroidPackageInstallerPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
+/** Plugin */
+class Plugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     private val packageName = "com.android_package_installer"
     private val PACKAGE_INSTALLED_ACTION = "${packageName}.content.SESSION_API_PACKAGE_INSTALLED"
     private val LOG_TAG = "${packageName}.logger"
