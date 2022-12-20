@@ -1,15 +1,9 @@
 import 'package:flutter/services.dart';
 
-import '../android_package_installer.dart';
+import 'installer_platform.dart';
 
 class MethodChannelAndroidPackageInstaller extends AndroidPackageInstallerPlatform {
   final methodChannel = const MethodChannel('android_package_installer');
-
-  @override
-  Future<String?> getPlatformVersion() async {
-    final version = await methodChannel.invokeMethod<String>('getPlatformVersion');
-    return version;
-  }
 
   @override
   Future<int?> installApk(String path) async {
