@@ -1,6 +1,5 @@
 import 'package:android_package_installer/src/installer_platform.dart';
 
-export 'package:android_package_installer/src/method_channel.dart';
 export 'package:android_package_installer/src/enums.dart';
 
 class AndroidPackageInstaller {
