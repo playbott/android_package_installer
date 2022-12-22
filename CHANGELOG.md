@@ -1,3 +1,6 @@
-## 0.0.1
+## 0.0.2.
+ - **FIX**: usage code in README
+ - **UPD**: description in pubspec.yaml
 
-* TODO: Describe initial release.
+## 0.0.1
+* Initial release.
