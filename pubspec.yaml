@@ -1,5 +1,5 @@
 name: android_package_installer
-description: Flutter plugin for installing Android package from apk file
+description: A Flutter plugin for installing Android package from apk file. Plugin uses Android Package Installer and requires minimum API Level version 21.
 version: 0.0.1
 homepage: https://github.com/playbott/android_package_installer
 repository: https://github.com/playbott/android_package_installer
