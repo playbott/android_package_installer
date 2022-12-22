@@ -1,15 +1,63 @@
 # android_package_installer
+A Flutter plugin for installing Android package from apk file. Plugin uses Android Package Installer and
+requires **minimum API Level version 21**.
 
-Flutter Android Package Manager Plugin
+## Using
+```dart
+import 'package:android_package_installer/android_package_installer.dart';
 
-## Getting Started
+  int? statusCode = await AndroidPackageInstaller.installApk(apkFilePath: '/sdcard/Download/com.example.apk');
+  if (code != null) {
+    PackageInstallerStatus status = PackageInstallerStatus.byCode(statusCode);
+    print(installationStatus.name);
+  }
+```
+To install the Android package the application will need permissions.
+You can use the `permission_handler` package to request them.
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+## Setup
+1. Add the permissions to your AndroidManifest.xml file in `<projectDir>/android/app/src/main/AndroidManifest.xml`:
+   * `android.permission.REQUEST_INSTALL_PACKAGES` - required for installing android packages.
+   * `android.permission.READ_EXTERNAL_STORAGE` - required to access the external storage where the apk file is located.
 
-For help getting started with Flutter development, view the
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```xml
+<manifest xmlns:tools="http://schemas.android.com/tools" ...>
+
+  <!-- ADD THESE PERMISSIONS -->
+  <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+  
+  <application ...>
+    <activity ...>
+
+      ...
+
+      <!-- ADD THIS INTENT FILTER -->
+      <intent-filter>
+        <action
+            android:name="com.android_package_installer.content.SESSION_API_PACKAGE_INSTALLED"
+            android:exported="false"/>
+      </intent-filter>
+    </activity>
+
+    <!-- ADD THIS PROVIDER -->
+    <provider
+      android:name="androidx.core.content.FileProvider"
+      android:authorities="${applicationId}"
+      android:grantUriPermissions="true">
+      <meta-data
+        android:name="android.support.FILE_PROVIDER_PATHS"
+        android:resource="@xml/file_paths"/>
+    </provider>
+  </application>
+</manifest>
+```
+
+2. Check external path in your custom paths file. If it doesn't exist, create it in `<projectDir>/android/app/src/main/res/xml/file_paths.xml`:
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <external-path name="external_files" path="."/>
+</paths>
+```
 
