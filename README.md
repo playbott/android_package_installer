@@ -8,7 +8,7 @@ import 'package:android_package_installer/android_package_installer.dart';
 
   int? statusCode = await AndroidPackageInstaller.installApk(apkFilePath: '/sdcard/Download/com.example.apk');
   if (code != null) {
-    PackageInstallerStatus status = PackageInstallerStatus.byCode(statusCode);
+    PackageInstallerStatus installationStatus = PackageInstallerStatus.byCode(statusCode);
     print(installationStatus.name);
   }
 ```
