@@ -1,3 +1,4 @@
+///Package installer result status
 enum PackageInstallerStatus {
   //TODO: maybe will use with event channel
   // pendingUserAction(-1),
@@ -13,6 +14,7 @@ enum PackageInstallerStatus {
 
   final int code;
 
+  ///Get enum type by status code
   static PackageInstallerStatus byCode(int code) {
     PackageInstallerStatus status = PackageInstallerStatus.unknown;
     try {
