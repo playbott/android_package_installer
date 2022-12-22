@@ -18,7 +18,8 @@ enum PackageInstallerStatus {
   static PackageInstallerStatus byCode(int code) {
     PackageInstallerStatus status = PackageInstallerStatus.unknown;
     try {
-      status = PackageInstallerStatus.values.firstWhere((element) => (code == element.code));
+      status = PackageInstallerStatus.values
+          .firstWhere((element) => (code == element.code));
     } catch (_) {
       return status;
     }

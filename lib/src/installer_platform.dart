@@ -6,7 +6,8 @@ abstract class AndroidPackageInstallerPlatform extends PlatformInterface {
 
   static final Object _token = Object();
 
-  static AndroidPackageInstallerPlatform _instance = MethodChannelAndroidPackageInstaller();
+  static AndroidPackageInstallerPlatform _instance =
+      MethodChannelAndroidPackageInstaller();
 
   static AndroidPackageInstallerPlatform get instance => _instance;
 

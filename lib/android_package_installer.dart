@@ -9,7 +9,8 @@ class AndroidPackageInstaller {
   /// [apkFilePath] - the path to the apk package file. Example: /sdcard/Download/app.apk
   /// Returns session result code.
   static Future<int?> installApk({required String apkFilePath}) {
-    Future<int?> code = AndroidPackageInstallerPlatform.instance.installApk(apkFilePath);
+    Future<int?> code =
+        AndroidPackageInstallerPlatform.instance.installApk(apkFilePath);
     return code;
   }
 }
