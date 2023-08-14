@@ -48,6 +48,14 @@ internal class Installer(private val context: Context, private var activity: Act
                 params.setInstallReason(PackageManager.INSTALL_REASON_USER)
             }
 
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                params.setRequireUserAction(PackageInstaller.SessionParams.USER_ACTION_NOT_REQUIRED)
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                params.setPackageSource(PackageInstaller.PACKAGE_SOURCE_STORE)
+            }
+
             sessionId = packageInstaller.createSession(params)
             session = packageInstaller.openSession(sessionId)
         } catch (e: Exception) {
