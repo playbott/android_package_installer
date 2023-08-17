@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import java.io.FileInputStream
 import java.io.IOException
+import android.util.Log
 
 internal class Installer(private val context: Context, private var activity: Activity?) {
     private var sessionId: Int = 0
