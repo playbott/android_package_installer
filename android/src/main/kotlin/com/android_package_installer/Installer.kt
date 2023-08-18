@@ -23,7 +23,7 @@ internal class Installer(private val context: Context, private var activity: Act
 
     fun installPackage(apkPath: String) {
         try {
-            session = createSession(activity!!)
+            session = createSession()
             loadAPKFile(apkPath, session)
             val intent = Intent(context, activity!!.javaClass)
             intent.action = packageInstalledAction
@@ -34,32 +34,30 @@ internal class Installer(private val context: Context, private var activity: Act
         } catch (e: IOException) {
             throw RuntimeException("IO exception", e)
         } catch (e: Exception) {
+            Log.e("E1", e.toString())
             session.abandon()
             throw e
         }
     }
 
-    private fun createSession(activity: Activity): PackageInstaller.Session {
+    private fun createSession(): PackageInstaller.Session {
         try {
-            packageManager = activity.packageManager
+            packageManager = context.packageManager
             packageInstaller = packageManager.packageInstaller
             val params = PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL)
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 params.setInstallReason(PackageManager.INSTALL_REASON_USER)
             }
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 params.setRequireUserAction(PackageInstaller.SessionParams.USER_ACTION_NOT_REQUIRED)
             }
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 params.setPackageSource(PackageInstaller.PACKAGE_SOURCE_STORE)
             }
-
             sessionId = packageInstaller.createSession(params)
             session = packageInstaller.openSession(sessionId)
         } catch (e: Exception) {
+            Log.e("E2", e.toString())
             throw e
         }
         return session
