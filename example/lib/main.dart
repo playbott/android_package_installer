@@ -17,6 +17,8 @@ Future<void> installInBG(int taskId, Map<String, dynamic>? params) async {
         await AndroidPackageInstaller.installApk(apkFilePath: apkFilePath);
     if (code != null) {
       print('Got result code: ' + PackageInstallerStatus.byCode(code).name);
+    } else {
+      print('Got null result');
     }
   } on PlatformException {
     print('Error at Platform. Failed to install apk file.');
