@@ -10,8 +10,8 @@ import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 // Be sure to annotate your callback function to avoid issues in release mode on Flutter >= 3.3.0
 @pragma('vm:entry-point')
 Future<void> installInBG(int taskId, Map<String, dynamic>? params) async {
+  String apkFilePath = params?['apkFilePath'];
   try {
-    String apkFilePath = params?['apkFilePath'];
     print('Starting async install of $apkFilePath...');
     int? code =
         await AndroidPackageInstaller.installApk(apkFilePath: apkFilePath);
