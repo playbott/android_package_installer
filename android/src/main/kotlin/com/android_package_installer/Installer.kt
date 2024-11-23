@@ -10,6 +10,7 @@ import android.os.Build
 import java.io.FileInputStream
 import java.io.IOException
 import android.util.Log
+import java.io.File
 
 internal class Installer(private val context: Context, private var activity: Activity?) {
     private var sessionId: Int = 0
@@ -21,16 +22,29 @@ internal class Installer(private val context: Context, private var activity: Act
         this.activity = activity
     }
 
-    fun installPackage(apkPath: String) {
+    fun installPackage(apkPaths: Array<String>) {
         try {
             session = createSession()
-            loadAPKFile(apkPath, session)
-            val intent = Intent(context, (if (activity == null) context else activity)!!.javaClass)
-            intent.action = packageInstalledAction
-            val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE)
-            val statusReceiver = pendingIntent.intentSender
-            session.commit(statusReceiver)
-            session.close()
+            for (apkPath in apkPaths) {
+                loadAPKFile(apkPath, session)
+            }
+            try {
+                val intent = Intent(context, (activity ?: context).javaClass)
+                intent.action = packageInstalledAction
+                val pendingIntent = PendingIntent.getActivity(
+                    context,
+                    0,
+                    intent,
+                    PendingIntent.FLAG_MUTABLE
+                )
+                val statusReceiver = pendingIntent.intentSender
+                session.commit(statusReceiver)
+                session.close()
+                Log.d("S1", "Session committed successfully.")
+            } catch (e: Exception) {
+                Log.e("E3", "Error committing session: ${e.message}")
+                throw e
+            }
         } catch (e: IOException) {
             throw RuntimeException("IO exception", e)
         } catch (e: Exception) {
@@ -65,15 +79,15 @@ internal class Installer(private val context: Context, private var activity: Act
 
     @Throws(IOException::class)
     private fun loadAPKFile(apkPath: String, session: PackageInstaller.Session) {
-        session.openWrite("package", 0, -1).use { packageInSession ->
-            FileInputStream(apkPath).use { `is` ->
+        val fileName = File(apkPath).name
+        session.openWrite(fileName, 0, -1).use { output ->
+            FileInputStream(apkPath).use { input ->
                 val buffer = ByteArray(16384)
-                var n: Int
-                var o = 1
-                while (`is`.read(buffer).also { n = it } >= 0) {
-                    packageInSession.write(buffer, 0, n)
-                    o++
+                var bytesRead: Int
+                while (input.read(buffer).also { bytesRead = it } != -1) {
+                    output.write(buffer, 0, bytesRead)
                 }
+                output.flush()
             }
         }
     }

@@ -71,15 +71,13 @@ class _MyAppState extends State<MyApp> {
                               decoration: const InputDecoration(
                                   labelText: "APK file path",
                                   hintText: "Enter path"))),
-                      _button('Select file', () async {
+                      _button('Select files', () async {
                         FilePickerResult? result = await FilePicker.platform
-                            .pickFiles(
-                                type: FileType.custom,
-                                allowedExtensions: ['apk']);
+                            .pickFiles(type: FileType.any, allowMultiple: true);
                         if (result != null) {
                           setState(() {
                             _filePathFieldController.text =
-                                result.files.single.path!;
+                                result.files.map((f) => f.path!).join(',');
                             _installationStatus = '';
                           });
                         }

@@ -27,8 +27,8 @@ internal class MethodCallHandler(private val installer: Installer) : MethodChann
         when (call.method) {
             "installApk" -> {
                 try {
-                    val apkFilePath = call.arguments.toString()
-                    installer.installPackage(apkFilePath)
+                    val apkFilePaths = call.arguments.toString().split(",").map { it.trim() }.toTypedArray()
+                    installer.installPackage(apkFilePaths)
                 } catch (e: Exception) {
                     Log.e("E0", e.toString())
                     resultSuccess(installStatusUnknown)
