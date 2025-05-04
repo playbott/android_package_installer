@@ -26,7 +26,7 @@ internal class Installer(private val context: Context, private var activity: Act
             loadAPKFile(apkPath, session)
             val intent = Intent(context, activity!!.javaClass)
             intent.action = packageInstalledAction
-            val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+            val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE)
             val statusReceiver = pendingIntent.intentSender
             session.commit(statusReceiver)
             session.close()
