@@ -7,7 +7,7 @@ requires **minimum API Level version 21**.
 import 'package:android_package_installer/android_package_installer.dart';
 
   int? statusCode = await AndroidPackageInstaller.installApk(apkFilePath: '/sdcard/Download/com.example.apk');
-  if (code != null) {
+  if (statusCode != null) {
     PackageInstallerStatus installationStatus = PackageInstallerStatus.byCode(statusCode);
     print(installationStatus.name);
   }
@@ -17,15 +17,20 @@ You can use the `permission_handler` package to request them.
 
 ## Setup
 1. Add the permissions to your AndroidManifest.xml file in `<projectDir>/android/app/src/main/AndroidManifest.xml`:
-   * `android.permission.REQUEST_INSTALL_PACKAGES` - required for installing android packages.
-   * `android.permission.READ_EXTERNAL_STORAGE` - required to access the external storage where the apk file is located.
+    * `android.permission.REQUEST_INSTALL_PACKAGES` - required for installing android packages.
+    * `android.permission.READ_EXTERNAL_STORAGE` - required to access the external storage where the apk file is located.
 
 ```xml
 <manifest xmlns:tools="http://schemas.android.com/tools" ...>
 
-  <!-- ADD THESE PERMISSIONS -->
-  <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
-  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+  <!-- ADD THESE PERMISSIONS: -->
+  <!-- Android 10 Permissions -->
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+  <!-- Android 11+ Permissions -->
+<uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+<uses-permission
+android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+tools:ignore="ScopedStorage"/>
   
   <application ...>
     <activity ...>
@@ -34,9 +39,7 @@ You can use the `permission_handler` package to request them.
 
       <!-- ADD THIS INTENT FILTER -->
       <intent-filter>
-        <action
-            android:name="com.android_package_installer.content.SESSION_API_PACKAGE_INSTALLED"
-            android:exported="false"/>
+        <action android:name="com.android_package_installer.content.SESSION_API_PACKAGE_INSTALLED"/>
       </intent-filter>
     </activity>
 
